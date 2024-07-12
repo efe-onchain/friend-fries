@@ -5,7 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 import {FriendFries} from "../src/FriendFries.sol";
 
 contract Populate is Script {
-    FriendFries fries = FriendFries(0x3a28B4fd35491ea51f42dab77828f5f73fFe43C8);
+    FriendFries fries = FriendFries(0x4D48997492D6D5952573284899dd2443D1c86b42);
     function setUp() public {}
 
     function run() public {

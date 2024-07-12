@@ -1,5 +1,29 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  bountyId: BigInt! # uint256
+type Bounty @entity {
+  id: ID!
+  blockTimestamp: BigInt!
+  title: String!
+  description: String!
+  image: String!
+  individualReward: BigInt!
+  deadline: BigInt!
+  maxParticipants: BigInt!
+  numParticipants: BigInt!
+  rewarded: BigInt!
+  status: Int8!
+  owner: Bytes!
+  participants: [Bytes!]!
+}
+
+type Claim @entity {
+  id: ID!
+  blockTimestamp: BigInt!
+  bountyId: ID!
+  participant: Bytes!
+  rewarded: BigInt!
+}
+
+type Participant @entity {
+  id: ID!
+  participated: [Bounty!]!
+  totalRewards: BigInt!
 }

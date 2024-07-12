@@ -11,9 +11,8 @@ contract FriendFries {
         uint256 maxParticipants,
         uint256 numParticipants,
         uint256 rewarded,
-        string status,
+        Status status,
         address owner,
-        address[] participants,
         uint256 deadline
     );
     event BountyClaimed(
@@ -41,12 +40,12 @@ contract FriendFries {
         uint256 rewarded;
         Status status;
         address owner;
-        address[] participants;
         uint256 deadline;
     }
 
     mapping(uint256 => Bounty) public bounties;
     mapping(address => uint256) public userEarnings;
+    mapping(address => mapping(uint256 => bool)) public userBounties;
 
     //write a function for creating a bounty
     function createBounty(
@@ -74,10 +73,23 @@ contract FriendFries {
             0,
             Status.Open,
             msg.sender,
-            new address[](0),
             _deadline
         );
         bounties[id] = newBounty;
+
+        emit BountyCreated(
+            id,
+            _title,
+            _description,
+            _image,
+            _individualReward,
+            _maxParticipants,
+            0,
+            0,
+            Status.Open,
+            msg.sender,
+            _deadline
+        );
     }
 
     // write a function to claim a bounty
@@ -98,7 +110,11 @@ contract FriendFries {
             block.timestamp < bounty.deadline,
             "Bounty deadline has passed"
         );
-        bounty.participants.push(hunter);
+
+        require(
+            userBounties[hunter][_id] == false,
+            "Hunter has already claimed this bounty"
+        );
         bounty.numParticipants = bounty.numParticipants + 1;
         // if the bounty is full, close it
         if (bounty.numParticipants == bounty.maxParticipants) {
@@ -109,6 +125,8 @@ contract FriendFries {
         // update the rewarded amount
         bounty.rewarded = bounty.rewarded + bounty.individualReward;
         payable(hunter).transfer(bounty.individualReward);
+
+        emit BountyClaimed(_id, hunter, bounty.individualReward);
     }
 
     function cancelBounty(uint256 _id) public {
@@ -119,7 +137,9 @@ contract FriendFries {
         uint256 remainingfunds = bounty.individualReward *
             (bounty.maxParticipants - bounty.numParticipants);
         if (remainingfunds > 0) {
-            payable(msg.sender).transfer(remainingfunds);
+            payable(bounty.owner).transfer(remainingfunds);
         }
+
+        emit BountyCancelled(_id);
     }
 }

@@ -15,12 +15,12 @@ export default function Home() {
     execHaloCmdWeb(command)
       .then((res: any) => {
         console.log(res);
-        setResponse(JSON.stringify(res));
+        setResponse(JSON.stringify(res, null, 4));
       })
       .catch((e: any) => {
         // display error
         console.error(e);
-        setResponse(JSON.stringify(e));
+        setResponse(JSON.stringify(e, null, 2));
       });
   }
 
@@ -28,7 +28,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div>Hello</div>
       <button onClick={signIn}>Login</button>
-      {response}
+      <div className="w-full">{response}</div>
     </main>
   );
 }

@@ -11,17 +11,23 @@
   },
   "dependencies": {
     "@arx-research/libhalo": "^1.4.3",
+    "@dynamic-labs/ethereum": "^2.3.0",
+    "@dynamic-labs/sdk-react-core": "^2.3.0",
     "crypto-browserify": "^3.12.0",
+    "jsonwebtoken": "^9.0.2",
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "viem": "^2.17.3"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
+    "node-jose": "^2.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",

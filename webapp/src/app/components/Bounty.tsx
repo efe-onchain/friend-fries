@@ -4,6 +4,7 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { convertEthToHumanReadable, convertUnixTimestampToDateTime } from "../helpers";
+import { Button } from "./Button";
 
 interface Bounty {
   id: number;
@@ -27,6 +28,7 @@ enum Status {
 }
 
 export function BountyCard({ bounty }: { bounty: any }) {
+  const address = "0x30d38078d6117285d6730f971d3f50a9004a575b";
   return (
     <div>
       {bounty ? (
@@ -48,6 +50,11 @@ export function BountyCard({ bounty }: { bounty: any }) {
             <p className="pb-4">Deadline: {convertUnixTimestampToDateTime(bounty.deadline)}</p>
             <h3 className="text-black text-lg text-left font-semibold">{bounty.title}</h3>
             <p className="text-gray-500">{bounty.description}</p>
+            <div className="flex justify-end">
+              {address === bounty.owner && (
+                <Button className="bg-primary text-primary-foreground hover:bg-primary/90">Accept Submission</Button>
+              )}
+            </div>
           </div>
         </div>
       ) : (

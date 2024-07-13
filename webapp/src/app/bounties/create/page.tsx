@@ -163,7 +163,7 @@ export default function Component() {
             <div className="mt-4 flex items-center justify-between">
               <div className="inline-flex items-center space-x-2 text-sm text-gray-500 ">
                 <UsersIcon className="h-5 w-5" />
-                <span>10/{maxParticipants} participants</span>
+                <span>0/{maxParticipants} participants</span>
               </div>
               <div className="inline-flex items-center space-x-2 text-sm text-gray-500 ">
                 <CalendarIcon className="h-5 w-5" />

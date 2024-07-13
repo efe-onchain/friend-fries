@@ -5,6 +5,7 @@ import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import { BountyCard } from "../components/Bounty";
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import Link from "next/link";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
   const [bounty, setBounty] = useState<any[]>([]);
@@ -14,68 +15,37 @@ export default function Home() {
     cache: new InMemoryCache(),
   });
   useEffect(() => {
-    if (!mine)
-      friendFriesClient
-        .query({
-          query: gql`
-            query {
-              bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
-                id
-                blockTimestamp
-                title
-                description
-                image
-                individualReward
-                maxParticipants
-                numParticipants
-                participants
-                owner
-                rewarded
-                status
-                deadline
-              }
+    friendFriesClient
+      .query({
+        query: gql`
+          query {
+            bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
+              id
+              blockTimestamp
+              title
+              description
+              image
+              individualReward
+              maxParticipants
+              numParticipants
+              participants
+              owner
+              rewarded
+              status
+              deadline
             }
-          `,
-        })
-        .then((result) => {
-          setBounty(result.data.bounties);
-        });
-    else
-      friendFriesClient
-        .query({
-          query: gql`
-            query {
-              bounties(
-                first: 15
-                orderBy: blockTimestamp
-                orderDirection: desc
-                where: { owner: "0x30d38078d6117285d6730f971d3f50a9004a575b" }
-              ) {
-                id
-                blockTimestamp
-                title
-                description
-                image
-                individualReward
-                maxParticipants
-                numParticipants
-                participants
-                owner
-                rewarded
-                status
-                deadline
-              }
-            }
-          `,
-        })
-        .then((result) => {
-          setBounty(result.data.bounties);
-        });
-  }, [mine]);
+          }
+        `,
+      })
+      .then((result) => {
+        setBounty(result.data.bounties);
+      });
+  }, []);
   return (
     <main>
-      <div className="flex justify-between font-bold text-xl pt-12">
+      <div className="flex justify-between items-center font-bold text-xl pt-12">
         <p>FriendFries🍟</p>
+        <DynamicWidget />
       </div>
       <div className="flex text-md justify-between items-center  py-4">
         <Link href="/bounties/create" className="font-normal  hover:underline">

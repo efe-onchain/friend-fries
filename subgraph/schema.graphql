@@ -1,30 +1,33 @@
 type Bounty @entity {
-  id: ID!
+  id: Bytes!
+  bountyNumber: BigInt!
   blockTimestamp: BigInt!
   title: String!
   description: String!
   image: String!
+  # reward calculated with individualReward * maxParticipants
   individualReward: BigInt!
   deadline: BigInt!
   maxParticipants: BigInt!
+  # save the number of participants to avoid querying the participants array
   numParticipants: BigInt!
   rewarded: BigInt!
   status: Int8!
   owner: Bytes!
-  participants: [Bytes!]!
-}
-
-type Claim @entity(immutable: true) {
-  id: Bytes!
-  blockTimestamp: BigInt!
-  claimId: ID!
-  bountyId: ID!
-  participant: Bytes!
-  rewarded: BigInt!
+  participants: [BountyParticipant!]! @derivedFrom(field: "bounty")
 }
 
 type Participant @entity {
   id: Bytes!
-  participated: [Bounty!]!
+  participated: [BountyParticipant!]! @derivedFrom(field: "participant")
   totalRewards: BigInt!
+}
+
+# lookup table for many to many relationship
+
+type BountyParticipant @entity(immutable: true) {
+  id: Bytes!
+  bounty: Bounty!
+  participant: Participant!
+  rewarded: BigInt!
 }

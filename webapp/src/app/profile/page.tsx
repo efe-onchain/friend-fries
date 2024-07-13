@@ -8,7 +8,7 @@ import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
 import "react-responsive-modal/styles.css";
 
-import { useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
+import { DynamicWidget, useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
   const wallets = useUserWallets();
@@ -76,8 +76,9 @@ export default function Home() {
   }, []);
   return (
     <main>
-      <div className="flex justify-between font-bold text-xl pt-12">
+      <div className="flex justify-between items-center font-bold text-xl pt-12">
         <p>FriendFries🍟</p>
+        <DynamicWidget />
       </div>
       <ProfileDetails profile={account} />
       {participant && (

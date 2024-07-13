@@ -1,9 +1,10 @@
 import { BigInt, Bytes, Int8 } from "@graphprotocol/graph-ts";
 import { Bounty } from "../../generated/schema";
-import { ADDRESS_ZERO, BIG_INT_ONE, BIG_INT_ZERO } from "../lib/constants";
+import { ADDRESS_ZERO, BIG_INT_ZERO } from "../lib/constants";
 
 export function buildBounty(
-  id: BigInt,
+  id: Bytes,
+  bountyNumber: BigInt,
   blockTimestamp: BigInt,
   title: string,
   description: string,
@@ -15,8 +16,9 @@ export function buildBounty(
   status: Int8,
   deadline: BigInt
 ): Bounty {
-  let bounty = new Bounty(id.toString());
+  let bounty = new Bounty(id);
   bounty.blockTimestamp = blockTimestamp;
+  bounty.bountyNumber = bountyNumber;
   bounty.title = title;
   bounty.description = description;
   bounty.image = image;
@@ -27,16 +29,16 @@ export function buildBounty(
   bounty.deadline = deadline;
   bounty.rewarded = BIG_INT_ZERO;
   bounty.status = status;
-  bounty.participants = [];
 
   return bounty as Bounty;
 }
 
-export function getBounty(id: BigInt): Bounty {
-  let bounty = Bounty.load(id.toString());
+export function getBounty(id: Bytes): Bounty {
+  let bounty = Bounty.load(id);
   if (bounty == null) {
-    bounty = new Bounty(id.toString());
+    bounty = new Bounty(id);
     bounty.blockTimestamp = BIG_INT_ZERO;
+    bounty.bountyNumber = BIG_INT_ZERO;
     bounty.title = "";
     bounty.description = "";
     bounty.image = "";
@@ -47,7 +49,6 @@ export function getBounty(id: BigInt): Bounty {
     bounty.deadline = BIG_INT_ZERO;
     bounty.rewarded = BIG_INT_ZERO;
     bounty.status = 0;
-    bounty.participants = [];
   }
   return bounty as Bounty;
 }

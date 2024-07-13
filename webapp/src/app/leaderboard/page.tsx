@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import { LeaderboardProfile } from "../components/LeaderboardProfile";
 import Link from "next/link";
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
@@ -32,8 +33,9 @@ export default function Leaderboard() {
       <Link href="/bounties" className="text-md font-normal">
         Back
       </Link>
-      <div className="flex justify-between font-bold text-xl pt-2">
+      <div className="flex justify-between items-center font-bold text-xl pt-2">
         <p>FriendFries🍟</p>
+        <DynamicWidget />
       </div>
 
       {leaderboard ? (

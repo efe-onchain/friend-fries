@@ -6,6 +6,7 @@ First, run the development server:
 
 ```bash
 cp .env.sample .env # and config variables
+npm run init
 # then
 npm run dev
 # or
@@ -14,6 +15,12 @@ yarn dev
 pnpm dev
 # or
 bun dev
+```
+
+Can deploy with
+
+```bash
+npm run deploy
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

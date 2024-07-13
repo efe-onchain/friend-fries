@@ -19,7 +19,11 @@ export default function Home() {
         .query({
           query: gql`
             query {
-              bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
+              bounties(
+                first: 15
+                orderBy: blockTimestamp
+                orderDirection: desc
+              ) {
                 id
                 blockTimestamp
                 title
@@ -96,7 +100,7 @@ export default function Home() {
         {bounty.length > 0 ? (
           bounty.map((bounty) => <BountyCard key={bounty.id} bounty={bounty} />)
         ) : (
-          <div>"Loading..."</div>
+          <div>Loading...</div>
         )}
       </div>
     </main>

@@ -17,7 +17,8 @@ export default function Home() {
   useEffect(() => {
     execute(LatestBountiesDocument, {}).then((result) => {
       console.log(result.data.bounties);
-      setBounty(result.data.bounties);
+      const bounties = result.data.bounties.filter((bounty: any) => bounty.maxParticipants > bounty.numParticipants);
+      setBounty(bounties);
     });
   }, []);
   return (

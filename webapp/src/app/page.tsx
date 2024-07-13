@@ -8,9 +8,11 @@ import {
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { authenticate } from "./utils";
+import { CustomModal } from "./components/CustomModal";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [auth, setAuth] = useState(
     null as { jwt?: string; publicKey: string } | null
   );
@@ -63,8 +65,18 @@ export default function Home() {
           <DynamicWidget />
           <div>Hello</div>
           {loggedIn && !auth ? (
-            <button onClick={signIn}>Connect bracelet</button>
+            <button onClick={() => setOpenModal(true)}>Connect bracelet</button>
           ) : null}
+          <CustomModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            friend={false}
+            onClick={() => {
+              signIn().then(() => {
+                setOpenModal(false);
+              });
+            }}
+          />
         </div>
       )}
     </main>

@@ -32,7 +32,6 @@ export default function Home() {
         `,
       })
       .then((result) => {
-        console.log(result.data.participant);
         setParticipant(result.data.participant);
       });
 

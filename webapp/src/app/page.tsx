@@ -8,8 +8,10 @@ import {
   useIsLoggedIn,
 } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [auth, setAuth] = useState(
     null as { jwt?: string; publicKey: string } | null
   );
@@ -57,38 +59,52 @@ export default function Home() {
     const auth = await authenticate();
 
     const wallet = (
-      await axios.get("https://friend-fries.vercel.app/lookup_wallet", {
-        params: { publicKey: auth.publicKey },
-      })
+      await axios.get(
+        `https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`
+      )
     ).data.wallet;
 
     return wallet;
   }
 
-  const { primaryWallet } = useDynamicContext();
+  const { primaryWallet, sdkHasLoaded } = useDynamicContext();
+  const loggedIn = useIsLoggedIn();
   useEffect(() => {
     const wallet = primaryWallet?.address;
     if (wallet) {
       axios
-        .get("https://friend-fries.vercel.app/lookup_pk", {
-          params: { wallet },
-        })
+        .get(`https://friend-fries.vercel.app/lookup_pk/${wallet}`)
         .then((response) => {
           if (response.status === 200) {
             setAuth({ publicKey: response.data.publicKey });
           }
         })
-        .catch(console.error);
+        .catch(console.error)
+        .finally(() => setIsLoading(false));
+    } else if (sdkHasLoaded) {
+      setIsLoading(false);
     }
-  }, [primaryWallet]);
+  }, [loggedIn, primaryWallet, sdkHasLoaded]);
 
+  const router = useRouter();
+  useEffect(() => {
+    if (auth) {
+      router.replace("/bounties");
+    }
+  }, [auth, router]);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <DynamicWidget />
-      <div>Hello</div>
-      {useIsLoggedIn() && !auth ? (
-        <button onClick={signIn}>Connect bracelet</button>
-      ) : null}
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <div>
+          <DynamicWidget />
+          <div>Hello</div>
+          {loggedIn && !auth ? (
+            <button onClick={signIn}>Connect bracelet</button>
+          ) : null}
+        </div>
+      )}
     </main>
   );
 }

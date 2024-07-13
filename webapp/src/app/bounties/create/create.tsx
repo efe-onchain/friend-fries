@@ -58,7 +58,6 @@ export default function CreateComponent() {
     console.log("Form submitted:", title);
     // Do not reset the title state here
   };
-  async function submit() {}
 
   return (
     <div className="container mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">

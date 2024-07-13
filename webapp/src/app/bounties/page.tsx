@@ -5,6 +5,9 @@ import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import { BountyCard } from "../components/Bounty";
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import Link from "next/link";
+import { WagmiProvider } from "wagmi";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { config, queryClient } from "../config";
 
 export default function Home() {
   const [bounty, setBounty] = useState<any[]>([]);
@@ -19,7 +22,11 @@ export default function Home() {
         .query({
           query: gql`
             query {
-              bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
+              bounties(
+                first: 15
+                orderBy: blockTimestamp
+                orderDirection: desc
+              ) {
                 id
                 blockTimestamp
                 title
@@ -74,31 +81,40 @@ export default function Home() {
   }, [mine]);
   return (
     <main>
-      <div className="flex justify-between font-bold text-xl pt-12">
-        <p>FriendFries🍟</p>
-      </div>
-      <div className="flex text-md justify-between items-center  py-4">
-        <Link href="/bounties/create" className="font-normal  hover:underline">
-          Create Bounty
-        </Link>
-        <span className="h-[20px] w-[1px] bg-black" />
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <div className="flex justify-between font-bold text-xl pt-12">
+            <p>FriendFries🍟</p>
+          </div>
+          <div className="flex text-md justify-between items-center  py-4">
+            <Link
+              href="/bounties/create"
+              className="font-normal  hover:underline"
+            >
+              Create Bounty
+            </Link>
+            <span className="h-[20px] w-[1px] bg-black" />
 
-        <div className="hover:underline" onClick={() => setMine(false)}>
-          Available Bounties
-        </div>
-        <span className="h-[20px] w-[1px] bg-black" />
+            <div className="hover:underline" onClick={() => setMine(false)}>
+              Available Bounties
+            </div>
+            <span className="h-[20px] w-[1px] bg-black" />
 
-        <Link href="/leaderboard" className="hover:underline">
-          Leaderboard
-        </Link>
-      </div>
-      <div className="flex flex-col items-center justify-center">
-        {bounty.length > 0 ? (
-          bounty.map((bounty) => <BountyCard key={bounty.id} bounty={bounty} />)
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
+            <Link href="/leaderboard" className="hover:underline">
+              Leaderboard
+            </Link>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            {bounty.length > 0 ? (
+              bounty.map((bounty) => (
+                <BountyCard key={bounty.id} bounty={bounty} />
+              ))
+            ) : (
+              <div>Loading...</div>
+            )}
+          </div>
+        </QueryClientProvider>
+      </WagmiProvider>
     </main>
   );
 }

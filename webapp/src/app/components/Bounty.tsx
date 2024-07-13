@@ -13,6 +13,10 @@ import "react-responsive-modal/styles.css";
 import axios from "axios";
 import { authenticate } from "../utils";
 import { CustomModal } from "./CustomModal";
+import { useWriteContract } from "wagmi";
+import { contractAddress } from "../constants";
+import { friendFries } from "../../../abi/FriendFries";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 interface Bounty {
   id: number;
@@ -47,14 +51,21 @@ async function lookupUser() {
   return wallet;
 }
 
-async function completeBounty() {
-  const wallet = await lookupUser();
-  // TODO: trx
-}
-
 export function BountyCard({ bounty }: { bounty: any }) {
-  const address = "0x30d38078d6117285d6730f971d3f50a9004a575b";
+  const { primaryWallet } = useDynamicContext();
+  const address = primaryWallet?.address;
   const [openModal, setOpenModal] = useState(false);
+  const { writeContract } = useWriteContract();
+  async function completeBounty() {
+    const wallet = await lookupUser();
+    alert(wallet);
+    writeContract({
+      address: contractAddress,
+      abi: friendFries,
+      functionName: "claimBountyForHunter",
+      args: [bounty.id, wallet],
+    });
+  }
 
   return (
     <div>

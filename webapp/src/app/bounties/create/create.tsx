@@ -4,17 +4,28 @@ import { Button } from "@/app/components/Button";
 import { convertUnixTimestampToDateTime } from "@/app/helpers";
 import Link from "next/link";
 import { useState } from "react";
-import { BaseError, createConfig, http, useWaitForTransactionReceipt, useWriteContract, WagmiProvider } from "wagmi";
+import {
+  BaseError,
+  createConfig,
+  http,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+  WagmiProvider,
+} from "wagmi";
 import { friendFries } from "../../../../abi/FriendFries";
 import { contractAddress } from "@/app/constants";
 import { baseSepolia } from "viem/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { Client, WalletClient } from "viem";
 
 export default function CreateComponent() {
   const { data: hash, writeContract, isPending, error } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
-  });
+  const { primaryWallet } = useDynamicContext();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } =
+    useWaitForTransactionReceipt({
+      hash,
+    });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -48,12 +59,17 @@ export default function CreateComponent() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault(); // Prevent default form submission
-    writeContract({
+    const walletClient =
+      (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
+    const [account] = await walletClient.getAddresses();
+    walletClient.writeContract({
       address: contractAddress,
       abi: friendFries,
       functionName: "createBounty",
+      chain: baseSepolia,
       args: [title, description, image, reward, maxParticipants, deadline],
       value: BigInt(maxParticipants) * BigInt(reward),
+      account,
     });
     console.log("Form submitted:", title);
     // Do not reset the title state here
@@ -65,12 +81,19 @@ export default function CreateComponent() {
         <div className="space-y-6">
           <Link href="/bounties">Back</Link>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">Create a Bounty</h1>
-            <p className="mt-3 text-lg text-gray-500 ">Fill out the form below to create a new bounty.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              Create a Bounty
+            </h1>
+            <p className="mt-3 text-lg text-gray-500 ">
+              Fill out the form below to create a new bounty.
+            </p>
           </div>
           <form className="space-y-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Bounty Title
               </label>
               <div className="mt-1">
@@ -86,7 +109,10 @@ export default function CreateComponent() {
               </div>
             </div>
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 ">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 "
+              >
                 Bounty Description
               </label>
               <div className="mt-1">
@@ -102,7 +128,10 @@ export default function CreateComponent() {
               </div>
             </div>
             <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="image"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Bounty Image URL
               </label>
               <div className="mt-1">
@@ -118,7 +147,10 @@ export default function CreateComponent() {
               </div>
             </div>
             <div>
-              <label htmlFor="reward" className="block text-sm font-medium text-gray-700 ">
+              <label
+                htmlFor="reward"
+                className="block text-sm font-medium text-gray-700 "
+              >
                 Reward per Person (ETH)
               </label>
               <div className="mt-1">
@@ -135,7 +167,10 @@ export default function CreateComponent() {
               </div>
             </div>
             <div>
-              <label htmlFor="max-participants" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="max-participants"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Maximum Participants
               </label>
               <div className="mt-1">
@@ -144,7 +179,11 @@ export default function CreateComponent() {
                   id="max-participants"
                   name="max-participants"
                   min={1}
-                  value={maxParticipants > 0 ? maxParticipants : "Maximum number of participants"}
+                  value={
+                    maxParticipants > 0
+                      ? maxParticipants
+                      : "Maximum number of participants"
+                  }
                   onChange={handleMaxParticipantsChange}
                   placeholder="Maximum number of participants"
                   className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary  sm:text-sm"
@@ -152,7 +191,10 @@ export default function CreateComponent() {
               </div>
             </div>
             <div>
-              <label htmlFor="max-participants" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="max-participants"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Deadline
               </label>
               <div className="mt-1">
@@ -180,13 +222,21 @@ export default function CreateComponent() {
             {hash && <div>Transaction Hash: {hash}</div>}
             {isConfirming && <div>Waiting for confirmation...</div>}
             {isConfirmed && <div>Transaction confirmed.</div>}
-            {error && <div>Error: {(error as BaseError).shortMessage || error.message}</div>}
+            {error && (
+              <div>
+                Error: {(error as BaseError).shortMessage || error.message}
+              </div>
+            )}
           </form>
         </div>
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-gray-900">Preview</h2>
-            <p className="mt-3 text-lg text-gray-500 ">This is how your bounty will look.</p>
+            <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+              Preview
+            </h2>
+            <p className="mt-3 text-lg text-gray-500 ">
+              This is how your bounty will look.
+            </p>
           </div>
           <div className="rounded-lg border border-gray-300 bg-white p-6 shadow-sm ">
             <div className="flex items-center justify-between">

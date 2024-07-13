@@ -26,39 +26,7 @@ enum Status {
   Cancelled,
 }
 
-export function BountyCard({ bountyId }: { bountyId: string }) {
-  const [bounty, setBounty] = useState<Bounty | null>(null);
-  const farReachClient = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URL!,
-    cache: new InMemoryCache(),
-  });
-  useEffect(() => {
-    farReachClient
-      .query({
-        query: gql`
-          query {
-            bounty(id: "${bountyId}") {
-              id
-              blockTimestamp
-              title
-              description
-              image
-              individualReward
-              maxParticipants
-              numParticipants
-              participants
-              owner
-              rewarded
-              status
-              deadline
-            }
-          }
-        `,
-      })
-      .then((result) => {
-        setBounty(result.data.bounty as Bounty);
-      });
-  });
+export function BountyCard({ bounty }: { bounty: any }) {
   return (
     <div>
       {bounty ? (

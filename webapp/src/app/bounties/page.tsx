@@ -29,10 +29,8 @@ export default function Home() {
         <Link href="/bounties/create" className="font-normal  hover:underline">
           Create Bounty
         </Link>
-        <span className="h-[20px] w-[1px] bg-black" />
 
         <div className="hover:underline">Available Bounties</div>
-        <span className="h-[20px] w-[1px] bg-black" />
 
         <Link href="/leaderboard" className="hover:underline">
           Leaderboard

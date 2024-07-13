@@ -3,47 +3,18 @@ import { useEffect, useState } from "react";
 // @ts-ignore
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import {
-  DynamicContextProvider,
   DynamicWidget,
   useDynamicContext,
-  useEmbeddedWallet,
   useIsLoggedIn,
-  UserProfile,
-  useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
 
-
 export default function Home() {
-  const [response, setResponse] = useState("{}");
-  // const [otc, setOtc] = useState("");
   const [auth, setAuth] = useState(
-    null as { jwt: string; publicKey: string } | null
+    null as { jwt?: string; publicKey: string } | null
   );
-  // const [user, setUser] = useState<UserProfile | undefined>();
 
-  // const { signInWithExternalJwt } = useExternalAuth();
-  async function signIn() {
-    // console.log(isSessionActive);
-    // if (!isSessionActive) {
-    //   try {
-    //     setOtc(await sendOneTimeCode());
-    //     // do whatever you want with that Id
-    //   } catch (e) {
-    //     // handle error
-    //     console.error(e);
-    //   }
-    // }
-
-    // try {
-    //   if (!primaryWallet || !userHasEmbeddedWallet()) return;
-
-    //   console.log(await createOrRestoreSession({ oneTimeCode: otc }));
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
-    console.log(primaryWallet);
+  async function authenticate() {
     const nonce = (await axios.get("https://friend-fries.vercel.app/login"))
       .data.nonce;
     let command = {
@@ -58,11 +29,20 @@ export default function Home() {
 
     const jwt = (
       await axios.get("https://friend-fries.vercel.app/login", {
-        params: { signature, nonce, publicKey },
+        params: { signature, nonce, publicKey, wallet: primaryWallet?.address },
       })
     ).data.jwt;
-    setResponse(jwt);
-    setAuth({ jwt, publicKey });
+
+    // TODO: verify jwt I guess
+    if (jwt) return { jwt, publicKey };
+
+    throw new Error("authentication failed");
+  }
+
+  async function signIn() {
+    const auth = await authenticate();
+
+    setAuth(auth);
 
     // doesn't work
     // signInWithExternalJwt({
@@ -73,20 +53,42 @@ export default function Home() {
     // });
   }
 
-  const { primaryWallet, isAuthenticated } = useDynamicContext();
+  async function lookupUser() {
+    const auth = await authenticate();
+
+    const wallet = (
+      await axios.get("https://friend-fries.vercel.app/lookup_wallet", {
+        params: { publicKey: auth.publicKey },
+      })
+    ).data.wallet;
+
+    return wallet;
+  }
+
+  const { primaryWallet } = useDynamicContext();
   useEffect(() => {
-    console.log("wallet: " + primaryWallet?.address);
+    const wallet = primaryWallet?.address;
+    if (wallet) {
+      axios
+        .get("https://friend-fries.vercel.app/lookup_pk", {
+          params: { wallet },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setAuth({ publicKey: response.data.publicKey });
+          }
+        })
+        .catch(console.error);
+    }
   }, [primaryWallet]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <DynamicWidget />
       <div>Hello</div>
-      {!useIsLoggedIn() || !auth ? (
+      {useIsLoggedIn() && !auth ? (
         <button onClick={signIn}>Connect bracelet</button>
       ) : null}
-      <div className="w-full">{response}</div>
-
     </main>
   );
 }

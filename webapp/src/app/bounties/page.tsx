@@ -34,22 +34,17 @@ export default function Home() {
         <div className="hover:underline">Available Bounties</div>
         <span className="h-[20px] w-[1px] bg-black" />
 
-
-            <Link href="/leaderboard" className="hover:underline">
-              Leaderboard
-            </Link>
-          </div>
-          <div className="flex flex-col items-center justify-center">
-            {bounty.length > 0 ? (
-              bounty.map((bounty) => (
-                <BountyCard key={bounty.id} bounty={bounty} />
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
-          </div>
-        </QueryClientProvider>
-      </WagmiProvider>
+        <Link href="/leaderboard" className="hover:underline">
+          Leaderboard
+        </Link>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        {bounty.length > 0 ? (
+          bounty.map((bounty) => <BountyCard key={bounty.id} bounty={bounty} />)
+        ) : (
+          <div>Loading...</div>
+        )}
+      </div>
     </main>
   );
 }

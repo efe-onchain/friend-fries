@@ -6,13 +6,17 @@ import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
 
-import { DynamicWidget, useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
-import { execute, ProfileBountiesDocument, ProfileDetailsDocument } from "../../../.graphclient";
-
 import {
+  DynamicWidget,
   useSocialAccounts,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
+import {
+  execute,
+  ProfileBountiesDocument,
+  ProfileDetailsDocument,
+} from "../../../.graphclient";
+
 import { WagmiProvider } from "wagmi";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { config, queryClient } from "../config";
@@ -25,25 +29,27 @@ export default function Home() {
   const [bounty, setBounty] = useState<any[]>([]);
   useEffect(() => {
     if (wallets && wallets.length > 0) {
-      execute(ProfileDetailsDocument, { address: wallets[0].address }).then((result) => {
-        console.log(result.data.participant);
-        setParticipant(result.data.participant);
-      });
+      execute(ProfileDetailsDocument, { address: wallets[0].address }).then(
+        (result) => {
+          console.log(result.data.participant);
+          setParticipant(result.data.participant);
+        }
+      );
 
-      execute(ProfileBountiesDocument, { address: wallets[0].address }).then((result) => {
-        setBounty(result.data.bounties);
-      });
+      execute(ProfileBountiesDocument, { address: wallets[0].address }).then(
+        (result) => {
+          setBounty(result.data.bounties);
+        }
+      );
     }
   }, []);
   return (
     <main>
-
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <div className="flex justify-between font-bold text-xl pt-12">
             <p>FriendFries🍟</p>
-                    <DynamicWidget />
-
+            <DynamicWidget />
           </div>
           <ProfileDetails profile={account} />
           {participant && (

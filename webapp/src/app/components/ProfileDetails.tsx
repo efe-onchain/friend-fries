@@ -1,8 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import farcasterIcon from "../../../public/farcastericon.svg";
+import { useEffect, useState } from "react";
 
-export function ProfileDetails({ profile }: { profile: any }) {
+export function ProfileDetails({ address }: { address: any }) {
+  const [profile, setProfile] = useState<any>(undefined);
+  useEffect(() => {
+    fetch(`https://api.web3.bio/profile/${address}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const filtered = data.filter((profile: any) => profile.platform === "farcaster");
+        if (filtered.length > 0) setProfile(filtered[0]);
+      });
+  }, []);
+
   if (!profile) return <div>Loading...</div>;
   return (
     <div className="flex flex-col items-center gap-6">

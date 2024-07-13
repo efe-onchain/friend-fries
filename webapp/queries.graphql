@@ -6,6 +6,7 @@ query LatestBounties {
     description
     image
     individualReward
+    bountyNumber
     maxParticipants
     numParticipants
     participants(first: 50) {
@@ -44,6 +45,7 @@ query ProfileBounties($address: Bytes!) {
     description
     image
     individualReward
+    bountyNumber
     maxParticipants
     numParticipants
     owner

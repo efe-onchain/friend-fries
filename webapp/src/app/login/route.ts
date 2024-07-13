@@ -166,7 +166,8 @@ export async function GET(request: NextRequest) {
 
   await sql.query(
     `INSERT INTO FF_USERS (nfc_pk, embedded_wallet)
-     SELECT nfc_pk, embedded_wallet FROM json_populate_recordset(NULL::FF_USERS, $1)`,
+     SELECT nfc_pk, embedded_wallet FROM json_populate_recordset(NULL::FF_USERS, $1)
+     ON CONFLICT (nfc_pk, embedded_wallet) DO NOTHING`,
     [
       JSON.stringify([
         {

@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-// @ts-ignore
-import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import {
   DynamicWidget,
   useDynamicContext,
@@ -9,6 +7,7 @@ import {
 } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { authenticate } from "./utils";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,33 +15,8 @@ export default function Home() {
     null as { jwt?: string; publicKey: string } | null
   );
 
-  async function authenticate() {
-    const nonce = (await axios.get("https://friend-fries.vercel.app/login"))
-      .data.nonce;
-    let command = {
-      name: "sign",
-      keyNo: 1,
-      message: nonce,
-      format: "text",
-    };
-    const response = await execHaloCmdWeb(command);
-    const signature = response.signature.der;
-    const publicKey = response.publicKey;
-
-    const jwt = (
-      await axios.get("https://friend-fries.vercel.app/login", {
-        params: { signature, nonce, publicKey, wallet: primaryWallet?.address },
-      })
-    ).data.jwt;
-
-    // TODO: verify jwt I guess
-    if (jwt) return { jwt, publicKey };
-
-    throw new Error("authentication failed");
-  }
-
   async function signIn() {
-    const auth = await authenticate();
+    const auth = await authenticate(primaryWallet?.address);
 
     setAuth(auth);
 
@@ -53,18 +27,6 @@ export default function Home() {
     // }).then(async (u) => {
     //   setUser(u);
     // });
-  }
-
-  async function lookupUser() {
-    const auth = await authenticate();
-
-    const wallet = (
-      await axios.get(
-        `https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`
-      )
-    ).data.wallet;
-
-    return wallet;
   }
 
   const { primaryWallet, sdkHasLoaded } = useDynamicContext();

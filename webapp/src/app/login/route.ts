@@ -148,10 +148,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!request.nextUrl.searchParams.get("wallet")) {
-    return new Response("wallet", { status: 400 });
-  }
-
   if (
     !verifySignature(
       nonce,
@@ -163,20 +159,21 @@ export async function GET(request: NextRequest) {
   }
 
   nonces.delete(nonce);
-
-  await sql.query(
-    `INSERT INTO FF_USERS (nfc_pk, embedded_wallet)
+  if (request.nextUrl.searchParams.get("wallet")) {
+    await sql.query(
+      `INSERT INTO FF_USERS (nfc_pk, embedded_wallet)
      SELECT nfc_pk, embedded_wallet FROM json_populate_recordset(NULL::FF_USERS, $1)
      ON CONFLICT (nfc_pk, embedded_wallet) DO NOTHING`,
-    [
-      JSON.stringify([
-        {
-          nfc_pk: request.nextUrl.searchParams.get("publicKey"),
-          embedded_wallet: request.nextUrl.searchParams.get("wallet"),
-        },
-      ]),
-    ]
-  );
+      [
+        JSON.stringify([
+          {
+            nfc_pk: request.nextUrl.searchParams.get("publicKey"),
+            embedded_wallet: request.nextUrl.searchParams.get("wallet"),
+          },
+        ]),
+      ]
+    );
+  }
 
   return Response.json(
     {

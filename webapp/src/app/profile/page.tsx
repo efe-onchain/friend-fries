@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
+import "react-responsive-modal/styles.css";
 
 export default function Home() {
   const [participant, setParticipant] = useState<any>([]);

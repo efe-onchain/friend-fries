@@ -83,10 +83,6 @@ function verifySignature(
   signature: string,
   publicKey: string
 ) {
-  console.log(`digest: ${message}`);
-  console.log(`signature: ${signature}`);
-  console.log(`publicKey: ${publicKey}`);
-
   // Compute the Ethereum address from the publicKey.
   const computedAddress = ethers.computeAddress("0x" + publicKey);
 

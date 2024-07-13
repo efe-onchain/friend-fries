@@ -12,6 +12,7 @@ import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import axios from "axios";
 import { authenticate } from "../utils";
+import { CustomModal } from "./CustomModal";
 
 interface Bounty {
   id: number;
@@ -46,27 +47,6 @@ async function lookupUser() {
   return wallet;
 }
 
-// https://stackoverflow.com/a/21742107
-function getMobileOperatingSystem() {
-  var userAgent = navigator.userAgent;
-
-  // Windows Phone must come first because its UA also contains "Android"
-  if (/windows phone/i.test(userAgent)) {
-    return "Windows Phone";
-  }
-
-  if (/android/i.test(userAgent)) {
-    return "Android";
-  }
-
-  // iOS detection from: http://stackoverflow.com/a/9039885/177710
-  if (/iPad|iPhone|iPod/.test(userAgent)) {
-    return "iOS";
-  }
-
-  return "unknown";
-}
-
 async function completeBounty() {
   const wallet = await lookupUser();
   // TODO: trx
@@ -75,8 +55,7 @@ async function completeBounty() {
 export function BountyCard({ bounty }: { bounty: any }) {
   const address = "0x30d38078d6117285d6730f971d3f50a9004a575b";
   const [openModal, setOpenModal] = useState(false);
-  const isIOS = getMobileOperatingSystem() === "iOS";
-  const isDesktop = getMobileOperatingSystem() === "unknown";
+
   return (
     <div>
       {bounty ? (
@@ -124,25 +103,11 @@ export function BountyCard({ bounty }: { bounty: any }) {
               )}
             </div>
           </div>
-          <Modal open={openModal} onClose={() => setOpenModal(false)} center>
-            <h2 className="mt-4">
-              {isDesktop
-                ? "Friendfries only works on mobile currently. Please open this page on mobile."
-                : "Scan the bracelet of the person that completed the bounty."}
-            </h2>
-            {isIOS ? (
-              <p>
-                Since you are on iOS, you need to click on the second option on
-                the next modal. Also, according to Kartik it might not work some
-                of the time, but what can you do... iOS
-              </p>
-            ) : null}
-            {!isDesktop ? (
-              <button className="float-right mt-8" onClick={completeBounty}>
-                Scan now
-              </button>
-            ) : null}
-          </Modal>
+          <CustomModal
+            open={openModal}
+            onClose={() => setOpenModal(false)}
+            onClick={completeBounty}
+          />
         </div>
       ) : (
         <div>Loading...</div>

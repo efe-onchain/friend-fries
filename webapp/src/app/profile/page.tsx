@@ -6,9 +6,11 @@ import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
-import "react-responsive-modal/styles.css";
 
-import { useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
+import {
+  useSocialAccounts,
+  useUserWallets,
+} from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
   const wallets = useUserWallets();
@@ -82,11 +84,20 @@ export default function Home() {
       <ProfileDetails profile={account} />
       {participant && (
         <div className="grid grid-cols-2 gap-4">
-          <ProfileStatCard name="Total Rewards" value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`} />
+          <ProfileStatCard
+            name="Total Rewards"
+            value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`}
+          />
           {participant.participated && (
-            <ProfileStatCard name="Bounties Completed" value={participant.participated.length} />
+            <ProfileStatCard
+              name="Bounties Completed"
+              value={participant.participated.length}
+            />
           )}
-          <ProfileStatCard name="Bounties Offered" value={bounty.length.toString()} />
+          <ProfileStatCard
+            name="Bounties Offered"
+            value={bounty.length.toString()}
+          />
         </div>
       )}
       <div className="flex justify-between font-bold text-xl pt-12">

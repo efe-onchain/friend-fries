@@ -17,6 +17,8 @@ import { useWriteContract } from "wagmi";
 import { contractAddress } from "../constants";
 import { friendFries } from "../../../abi/FriendFries";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { WalletClient } from "viem";
+import { baseSepolia } from "viem/chains";
 
 interface Bounty {
   id: number;
@@ -55,15 +57,19 @@ export function BountyCard({ bounty }: { bounty: any }) {
   const { primaryWallet } = useDynamicContext();
   const address = primaryWallet?.address;
   const [openModal, setOpenModal] = useState(false);
-  const { writeContract } = useWriteContract();
   async function completeBounty() {
     const wallet = await lookupUser();
     alert(wallet);
-    writeContract({
+    const walletClient =
+      (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
+    const [account] = await walletClient.getAddresses();
+    walletClient.writeContract({
       address: contractAddress,
       abi: friendFries,
       functionName: "claimBountyForHunter",
       args: [bounty.id, wallet],
+      account,
+      chain: baseSepolia,
     });
   }
 

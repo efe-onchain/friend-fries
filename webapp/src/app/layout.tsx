@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "FriendFries🍟",
   description: "Chase bounties, make friends",
 };
+import { http, createConfig, WagmiProvider } from "wagmi";
+import { baseSepolia, mainnet, sepolia } from "wagmi/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export default function RootLayout({
   children,

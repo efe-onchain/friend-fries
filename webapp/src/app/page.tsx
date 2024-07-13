@@ -8,6 +8,11 @@ import {
   useIsLoggedIn,
 } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
+import { createConfig, http, WagmiProvider } from "wagmi";
+import { baseSepolia } from "viem/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { config, queryClient } from "./config";
+
 
 export default function Home() {
   const [auth, setAuth] = useState(
@@ -83,12 +88,16 @@ export default function Home() {
   }, [primaryWallet]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <DynamicWidget />
-      <div>Hello</div>
-      {useIsLoggedIn() && !auth ? (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          <DynamicWidget />
+          <div>Hello</div>
+         {useIsLoggedIn() && !auth ? (
         <button onClick={signIn}>Connect bracelet</button>
       ) : null}
-    </main>
+        </main>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

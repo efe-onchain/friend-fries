@@ -18,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={GeistMono.className}>{children}</body>
+      <body
+        className={`${GeistMono.className} min-h-screen max-w-md flex flex-col justify-center items-center mx-auto`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <main className="flex justify-center">
-      <div className="flex flex-col items-center justify-center min-h-screen max-w-md fle">
+      <div className="flex flex-col items-center justify-center ">
         <div>Hello</div>
         <button onClick={signIn}>Login</button>
         <div className="w-full">{response}</div>

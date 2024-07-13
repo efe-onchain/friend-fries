@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { wallet: string } }
 ) {
   const { rows } =
-    await sql`SELECT nfc_pk from ff_users where embedded_wallet =${params.wallet}`;
+    await sql`SELECT nfc_pk from ff_users where embedded_wallet=${params.wallet}`;
 
   if (rows.length !== 1) {
     return new Response("wallet not valid", { status: 400 });

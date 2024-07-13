@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
+import "react-responsive-modal/styles.css";
+
 import { useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {

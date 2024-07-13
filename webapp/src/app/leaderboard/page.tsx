@@ -29,6 +29,7 @@ export default function Leaderboard() {
           {leaderboard.length > 0 ? (
             leaderboard.map((participant, index) => (
               <LeaderboardProfile
+                key={index}
                 ranking={index + 1}
                 address={participant.id}
                 totalRewards={participant.totalRewards}

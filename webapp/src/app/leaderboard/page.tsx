@@ -42,7 +42,7 @@ export default function Leaderboard() {
             leaderboard.map((participant, index) => (
               <LeaderboardProfile
                 ranking={index + 1}
-                address={"builderszn.eth"}
+                address={participant.id}
                 totalRewards={participant.totalRewards}
               />
             ))

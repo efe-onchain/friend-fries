@@ -14,16 +14,17 @@ type Bounty @entity {
   participants: [Bytes!]!
 }
 
-type Claim @entity {
-  id: ID!
+type Claim @entity(immutable: true) {
+  id: Bytes!
   blockTimestamp: BigInt!
+  claimId: ID!
   bountyId: ID!
   participant: Bytes!
   rewarded: BigInt!
 }
 
 type Participant @entity {
-  id: ID!
+  id: Bytes!
   participated: [Bounty!]!
   totalRewards: BigInt!
 }

@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 // @ts-ignore
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
+import { BountyCard } from "./components/Bounty";
 
 export default function Home() {
   const [response, setResponse] = useState("{}");
@@ -25,9 +26,10 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 max-w-[560px]">
       <div>Hello</div>
       <button onClick={signIn}>Login</button>
+      <BountyCard bountyId="1" />
       <div className="w-full">{response}</div>
     </main>
   );

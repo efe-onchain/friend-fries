@@ -10,6 +10,7 @@
     "deploy": "vercel --prod --token $(grep VERCEL_TOKEN .env | cut -d '=' -f2)"
   },
   "dependencies": {
+    "@apollo/client": "^3.10.8",
     "@arx-research/libhalo": "^1.4.3",
     "@dynamic-labs/ethereum": "^2.3.0",
     "@dynamic-labs/sdk-react-core": "^2.3.0",

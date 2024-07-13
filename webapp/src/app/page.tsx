@@ -1,10 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  DynamicWidget,
-  useDynamicContext,
-  useIsLoggedIn,
-} from "@dynamic-labs/sdk-react-core";
+import { DynamicWidget, useDynamicContext, useIsLoggedIn } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { authenticate } from "./utils";
@@ -18,9 +14,7 @@ import "react-responsive-modal/styles.css";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [auth, setAuth] = useState(
-    null as { jwt?: string; publicKey: string } | null
-  );
+  const [auth, setAuth] = useState(null as { jwt?: string; publicKey: string } | null);
 
   async function signIn() {
     const auth = await authenticate(primaryWallet?.address);
@@ -70,11 +64,9 @@ export default function Home() {
           ) : (
             <div>
               <DynamicWidget />
-              <div>Hello</div>
+              FriendFries🍟
               {loggedIn && !auth ? (
-                <button onClick={() => setOpenModal(true)}>
-                  Connect bracelet
-                </button>
+                <button onClick={() => setOpenModal(true)}>Connect Your ETHGlobal NFC Tag</button>
               ) : null}
               <CustomModal
                 open={openModal}

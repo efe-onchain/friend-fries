@@ -909,10 +909,10 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1": LatestBountiesDocument,
-"3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1": LeaderboardDocument,
-"3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1": ProfileDetailsDocument,
-"3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1": ProfileBountiesDocument
+        "c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16": LatestBountiesDocument,
+"c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16": LeaderboardDocument,
+"c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16": ProfileDetailsDocument,
+"c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16": ProfileBountiesDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -939,28 +939,28 @@ additionalEnvelopPlugins.push(usePersistedOperations({
           return printWithCache(LatestBountiesDocument);
         },
         location: 'LatestBountiesDocument.graphql',
-        sha256Hash: '3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1'
+        sha256Hash: 'c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16'
       },{
         document: LeaderboardDocument,
         get rawSDL() {
           return printWithCache(LeaderboardDocument);
         },
         location: 'LeaderboardDocument.graphql',
-        sha256Hash: '3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1'
+        sha256Hash: 'c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16'
       },{
         document: ProfileDetailsDocument,
         get rawSDL() {
           return printWithCache(ProfileDetailsDocument);
         },
         location: 'ProfileDetailsDocument.graphql',
-        sha256Hash: '3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1'
+        sha256Hash: 'c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16'
       },{
         document: ProfileBountiesDocument,
         get rawSDL() {
           return printWithCache(ProfileBountiesDocument);
         },
         location: 'ProfileBountiesDocument.graphql',
-        sha256Hash: '3e506d711ac3ad0df6570f605b2f6451b76976c19ea2b91282ac14839c683ac1'
+        sha256Hash: 'c3873dd1eb35e33cd87d04d18f6a2eaccd89b4806451d2f5b7d6e39367ce9c16'
       }
     ];
     },
@@ -1019,7 +1019,7 @@ export type LatestBountiesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LatestBountiesQuery = { bounties: Array<(
-    Pick<Bounty, 'id' | 'blockTimestamp' | 'title' | 'description' | 'image' | 'individualReward' | 'maxParticipants' | 'numParticipants' | 'owner' | 'rewarded' | 'status' | 'deadline'>
+    Pick<Bounty, 'id' | 'blockTimestamp' | 'title' | 'description' | 'image' | 'individualReward' | 'bountyNumber' | 'maxParticipants' | 'numParticipants' | 'owner' | 'rewarded' | 'status' | 'deadline'>
     & { participants: Array<Pick<BountyParticipant, 'id' | 'rewarded'>> }
   )> };
 
@@ -1043,7 +1043,7 @@ export type ProfileBountiesQueryVariables = Exact<{
 }>;
 
 
-export type ProfileBountiesQuery = { bounties: Array<Pick<Bounty, 'id' | 'blockTimestamp' | 'title' | 'description' | 'image' | 'individualReward' | 'maxParticipants' | 'numParticipants' | 'owner' | 'rewarded' | 'status' | 'deadline'>> };
+export type ProfileBountiesQuery = { bounties: Array<Pick<Bounty, 'id' | 'blockTimestamp' | 'title' | 'description' | 'image' | 'individualReward' | 'bountyNumber' | 'maxParticipants' | 'numParticipants' | 'owner' | 'rewarded' | 'status' | 'deadline'>> };
 
 
 export const LatestBountiesDocument = gql`
@@ -1055,6 +1055,7 @@ export const LatestBountiesDocument = gql`
     description
     image
     individualReward
+    bountyNumber
     maxParticipants
     numParticipants
     participants(first: 50) {
@@ -1101,6 +1102,7 @@ export const ProfileBountiesDocument = gql`
     description
     image
     individualReward
+    bountyNumber
     maxParticipants
     numParticipants
     owner

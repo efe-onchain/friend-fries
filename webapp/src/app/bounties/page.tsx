@@ -3,43 +3,17 @@ import { useEffect, useState } from "react";
 // @ts-ignore
 import { execHaloCmdWeb } from "@arx-research/libhalo/api/web.js";
 import { BountyCard } from "../components/Bounty";
-import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
+import { LatestBountiesDocument, execute } from "../../../.graphclient";
 import Link from "next/link";
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
   const [bounty, setBounty] = useState<any[]>([]);
-  const [mine, setMine] = useState(false);
-  const friendFriesClient = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URL!,
-    cache: new InMemoryCache(),
-  });
+
   useEffect(() => {
-    friendFriesClient
-      .query({
-        query: gql`
-          query {
-            bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
-              id
-              blockTimestamp
-              title
-              description
-              image
-              individualReward
-              maxParticipants
-              numParticipants
-              participants
-              owner
-              rewarded
-              status
-              deadline
-            }
-          }
-        `,
-      })
-      .then((result) => {
-        setBounty(result.data.bounties);
-      });
+    execute(LatestBountiesDocument, {}).then((result) => {
+      setBounty(result.data.bounties);
+    });
   }, []);
   return (
     <main>
@@ -53,9 +27,7 @@ export default function Home() {
         </Link>
         <span className="h-[20px] w-[1px] bg-black" />
 
-        <div className="hover:underline" onClick={() => setMine(false)}>
-          Available Bounties
-        </div>
+        <div className="hover:underline">Available Bounties</div>
         <span className="h-[20px] w-[1px] bg-black" />
 
         <Link href="/leaderboard" className="hover:underline">

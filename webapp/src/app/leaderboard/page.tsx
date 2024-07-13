@@ -1,32 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import { LeaderboardProfile } from "../components/LeaderboardProfile";
 import Link from "next/link";
 import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
+import { execute, LeaderboardDocument } from "../../../.graphclient";
 
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
-  const friendFriesClient = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URL!,
-    cache: new InMemoryCache(),
-  });
+
   useEffect(() => {
-    friendFriesClient
-      .query({
-        query: gql`
-          query {
-            participants(orderBy: totalRewards, orderDirection: desc) {
-              id
-              totalRewards
-            }
-          }
-        `,
-      })
-      .then((result) => {
-        setLeaderboard(result.data.participants);
-      });
+    execute(LeaderboardDocument, {}).then((result) => {
+      setLeaderboard(result.data.participants);
+    });
   }, []);
   return (
     <div>

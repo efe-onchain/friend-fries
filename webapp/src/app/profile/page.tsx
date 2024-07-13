@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { BountyCard } from "../components/Bounty";
-import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
@@ -9,6 +8,7 @@ import { convertEthToHumanReadable } from "../helpers";
 import "react-responsive-modal/styles.css";
 
 import { DynamicWidget, useSocialAccounts, useUserWallets } from "@dynamic-labs/sdk-react-core";
+import { execute, ProfileBountiesDocument, ProfileDetailsDocument } from "../../../.graphclient";
 
 export default function Home() {
   const wallets = useUserWallets();
@@ -16,62 +16,16 @@ export default function Home() {
   const account = getLinkedAccountInformation("farcaster" as any);
   const [participant, setParticipant] = useState<any>([]);
   const [bounty, setBounty] = useState<any[]>([]);
-  const friendFriesClient = new ApolloClient({
-    uri: process.env.NEXT_PUBLIC_SUBGRAPH_URL!,
-    cache: new InMemoryCache(),
-  });
   useEffect(() => {
     if (wallets && wallets.length > 0) {
-      friendFriesClient
-        .query({
-          query: gql`
-            query {
-              participant(id: "${wallets[0].address}") {
-                id
-                totalRewards
-                participated(first: 50) {
-                  id
-                  image
-                }
-              }
-            }
-          `,
-        })
-        .then((result) => {
-          console.log(result.data.participant);
-          setParticipant(result.data.participant);
-        });
+      execute(ProfileDetailsDocument, { address: wallets[0].address }).then((result) => {
+        console.log(result.data.participant);
+        setParticipant(result.data.participant);
+      });
 
-      friendFriesClient
-        .query({
-          query: gql`
-            query {
-              bounties(
-                first: 50
-                orderBy: blockTimestamp
-                orderDirection: desc
-                where: { owner: "${wallets[0].address}" }
-              ) {
-                id
-                blockTimestamp
-                title
-                description
-                image
-                individualReward
-                maxParticipants
-                numParticipants
-                participants
-                owner
-                rewarded
-                status
-                deadline
-              }
-            }
-          `,
-        })
-        .then((result) => {
-          setBounty(result.data.bounties);
-        });
+      execute(ProfileBountiesDocument, { address: wallets[0].address }).then((result) => {
+        setBounty(result.data.bounties);
+      });
     }
   }, []);
   return (

@@ -1,0 +1,54 @@
+query LatestBounties {
+  bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
+    id
+    blockTimestamp
+    title
+    description
+    image
+    individualReward
+    maxParticipants
+    numParticipants
+    participants(first: 50) {
+      id
+      rewarded
+    }
+    owner
+    rewarded
+    status
+    deadline
+  }
+}
+
+query Leaderboard {
+  participants(orderBy: totalRewards, orderDirection: desc) {
+    id
+    totalRewards
+  }
+}
+
+query ProfileDetails($address: ID!) {
+  participant(id: $address) {
+    id
+    totalRewards
+    participated(first: 50) {
+      id
+    }
+  }
+}
+
+query ProfileBounties($address: Bytes!) {
+  bounties(first: 50, orderBy: blockTimestamp, orderDirection: desc, where: { owner: $address }) {
+    id
+    blockTimestamp
+    title
+    description
+    image
+    individualReward
+    maxParticipants
+    numParticipants
+    owner
+    rewarded
+    status
+    deadline
+  }
+}

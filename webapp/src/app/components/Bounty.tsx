@@ -1,12 +1,8 @@
 "use client";
 
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  convertEthToHumanReadable,
-  convertUnixTimestampToDateTime,
-} from "../helpers";
+import { convertEthToHumanReadable, convertUnixTimestampToDateTime } from "../helpers";
 import { Button } from "./Button";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
@@ -37,11 +33,8 @@ enum Status {
 async function lookupUser() {
   const auth = await authenticate();
 
-  const wallet: string = (
-    await axios.get(
-      `https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`
-    )
-  ).data.wallet;
+  const wallet: string = (await axios.get(`https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`)).data
+    .wallet;
 
   return wallet;
 }
@@ -81,37 +74,22 @@ export function BountyCard({ bounty }: { bounty: any }) {
     <div>
       {bounty ? (
         <div className="flex flex-col justify-center items-center p-4">
-          <Image
-            className="rounded-xl"
-            src={bounty.image}
-            alt={bounty?.title}
-            width={300}
-            height={300}
-          />
+          <Image className="rounded-xl" src={bounty.image} alt={bounty?.title} width={300} height={300} />
           <div className="py-4">
             <div>
               <p className="text-gray-500">
-                from:{" "}
-                {`${bounty.owner.substring(0, 6)}...${bounty.owner.substring(
-                  bounty.owner.length - 4
-                )}`}
+                from: {`${bounty.owner.substring(0, 6)}...${bounty.owner.substring(bounty.owner.length - 4)}`}
               </p>
             </div>
 
             <div className="flex justify-between">
-              <p>
-                Bounty: {convertEthToHumanReadable(bounty.individualReward)} ETH
-              </p>
+              <p>Bounty: {convertEthToHumanReadable(bounty.individualReward)} ETH</p>
               <p>
                 Completed By: {bounty.numParticipants}/{bounty.maxParticipants}
               </p>
             </div>
-            <p className="pb-4">
-              Deadline: {convertUnixTimestampToDateTime(bounty.deadline)}
-            </p>
-            <h3 className="text-black text-lg text-left font-semibold">
-              {bounty.title}
-            </h3>
+            <p className="pb-4">Deadline: {convertUnixTimestampToDateTime(bounty.deadline)}</p>
+            <h3 className="text-black text-lg text-left font-semibold">{bounty.title}</h3>
             <p className="text-gray-500">{bounty.description}</p>
             <div className="flex justify-end">
               {address === bounty.owner && (
@@ -132,9 +110,8 @@ export function BountyCard({ bounty }: { bounty: any }) {
             </h2>
             {isIOS ? (
               <p>
-                Since you are on iOS, you need to click on the second option on
-                the next modal. Also, according to Kartik it might not work some
-                of the time, but what can you do... iOS
+                Since you are on iOS, you need to click on the second option on the next modal. Also, according to
+                Kartik it might not work some of the time, but what can you do... iOS
               </p>
             ) : null}
             {!isDesktop ? (

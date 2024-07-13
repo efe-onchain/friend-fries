@@ -6,8 +6,12 @@ import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
+import { useSocialAccounts } from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
+  const { getLinkedAccountInformation } = useSocialAccounts();
+  const account = getLinkedAccountInformation("farcaster" as any);
+  console.log(account, "ACCOUNT");
   const [participant, setParticipant] = useState<any>([]);
   const [bounty, setBounty] = useState<any[]>([]);
   const friendFriesClient = new ApolloClient({
@@ -71,23 +75,14 @@ export default function Home() {
       <div className="flex justify-between font-bold text-xl pt-12">
         <p>FriendFries🍟</p>
       </div>
-      <ProfileDetails address={"builderszn.eth"} />
+      <ProfileDetails profile={account} />
       {participant && (
         <div className="grid grid-cols-2 gap-4">
-          <ProfileStatCard
-            name="Total Rewards"
-            value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`}
-          />
+          <ProfileStatCard name="Total Rewards" value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`} />
           {participant.participated && (
-            <ProfileStatCard
-              name="Bounties Completed"
-              value={participant.participated.length}
-            />
+            <ProfileStatCard name="Bounties Completed" value={participant.participated.length} />
           )}
-          <ProfileStatCard
-            name="Bounties Offered"
-            value={bounty.length.toString()}
-          />
+          <ProfileStatCard name="Bounties Offered" value={bounty.length.toString()} />
         </div>
       )}
       <div className="flex justify-between font-bold text-xl pt-12">

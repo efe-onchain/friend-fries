@@ -74,11 +74,20 @@ export default function Home() {
       <ProfileDetails address={"builderszn.eth"} />
       {participant && (
         <div className="grid grid-cols-2 gap-4">
-          <ProfileStatCard name="Total Rewards" value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`} />
+          <ProfileStatCard
+            name="Total Rewards"
+            value={`${convertEthToHumanReadable(participant.totalRewards)} ETH`}
+          />
           {participant.participated && (
-            <ProfileStatCard name="Bounties Completed" value={participant.participated.length} />
+            <ProfileStatCard
+              name="Bounties Completed"
+              value={participant.participated.length}
+            />
           )}
-          <ProfileStatCard name="Bounties Offered" value={bounty.length.toString()} />
+          <ProfileStatCard
+            name="Bounties Offered"
+            value={bounty.length.toString()}
+          />
         </div>
       )}
       <div className="flex justify-between font-bold text-xl pt-12">
@@ -87,7 +96,7 @@ export default function Home() {
       {bounty.length > 0 ? (
         bounty.map((bounty) => <BountyCard key={bounty.id} bounty={bounty} />)
       ) : (
-        <div>"Loading..."</div>
+        <div>Loading...</div>
       )}
     </main>
   );

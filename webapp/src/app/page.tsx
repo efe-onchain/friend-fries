@@ -26,11 +26,12 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 max-w-[560px]">
-      <div>Hello</div>
-      <button onClick={signIn}>Login</button>
-      <BountyCard bountyId="1" />
-      <div className="w-full">{response}</div>
+    <main className="flex justify-center">
+      <div className="flex flex-col items-center justify-center min-h-screen max-w-md fle">
+        <div>Hello</div>
+        <button onClick={signIn}>Login</button>
+        <div className="w-full">{response}</div>
+      </div>
     </main>
   );
 }

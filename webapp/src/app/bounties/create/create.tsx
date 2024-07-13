@@ -16,7 +16,8 @@ import { friendFries } from "../../../../abi/FriendFries";
 import { contractAddress } from "@/app/constants";
 import { baseSepolia } from "viem/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+
+import { useDynamicContext, DynamicWidget } from "@dynamic-labs/sdk-react-core";
 import { Client, WalletClient } from "viem";
 
 export default function CreateComponent() {
@@ -79,7 +80,10 @@ export default function CreateComponent() {
     <div className="container mx-auto max-w-md px-4 py-12 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 ">
         <div className="space-y-6">
-          <Link href="/bounties">Back</Link>
+          <div className="flex justify-between items-center">
+            <Link href="/bounties">Back</Link>
+            <DynamicWidget />
+          </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">
               Create a Bounty

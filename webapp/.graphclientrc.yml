@@ -1,0 +1,8 @@
+sources:
+  - name: friendfries
+    handler:
+      graphql:
+        endpoint: https://api.studio.thegraph.com/query/55913/friendfries/version/latest
+
+documents:
+  - ./queries.graphql

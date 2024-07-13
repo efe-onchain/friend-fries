@@ -63,7 +63,7 @@ export default function CreateComponent() {
     const walletClient =
       (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
     const [account] = await walletClient.getAddresses();
-    walletClient.writeContract({
+    await walletClient.writeContract({
       address: contractAddress,
       abi: friendFries,
       functionName: "createBounty",

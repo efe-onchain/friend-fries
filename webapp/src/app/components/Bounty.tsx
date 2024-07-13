@@ -58,15 +58,21 @@ export function BountyCard({ bounty }: { bounty: any }) {
   const [openModal, setOpenModal] = useState(false);
   async function completeBounty() {
     const wallet = await lookupUser();
-    alert(wallet);
+    alert(
+      wallet +
+        " & " +
+        bounty.bountyNumber +
+        "; type: " +
+        typeof bounty.bountyNumber
+    );
     const walletClient =
       (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
     const [account] = await walletClient.getAddresses();
-    walletClient.writeContract({
+    await walletClient.writeContract({
       address: contractAddress,
       abi: friendFries,
       functionName: "claimBountyForHunter",
-      args: [bounty.id, wallet],
+      args: [bounty.bountyNumber, wallet],
       account,
       chain: baseSepolia,
     });

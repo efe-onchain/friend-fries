@@ -8,9 +8,9 @@ dataSources:
     name: FriendFries
     network: base-sepolia
     source:
-      address: "0x4D48997492D6D5952573284899dd2443D1c86b42"
+      address: "0x82B64c32cefd00d101718B21B3B66f374097E0b0"
       abi: FriendFries
-      startBlock: 12523443
+      startBlock: 12564745
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

@@ -14,7 +14,7 @@ export default function Home() {
     null as { jwt?: string; publicKey: string } | null
   );
 
-  async function signIn() {
+  async function authenticate() {
     const nonce = (await axios.get("https://friend-fries.vercel.app/login"))
       .data.nonce;
     let command = {
@@ -32,7 +32,17 @@ export default function Home() {
         params: { signature, nonce, publicKey, wallet: primaryWallet?.address },
       })
     ).data.jwt;
-    setAuth({ jwt, publicKey });
+
+    // TODO: verify jwt I guess
+    if (jwt) return { jwt, publicKey };
+
+    throw new Error("authentication failed");
+  }
+
+  async function signIn() {
+    const auth = await authenticate();
+
+    setAuth(auth);
 
     // doesn't work
     // signInWithExternalJwt({
@@ -41,6 +51,18 @@ export default function Home() {
     // }).then(async (u) => {
     //   setUser(u);
     // });
+  }
+
+  async function lookupUser() {
+    const auth = await authenticate();
+
+    const wallet = (
+      await axios.get("https://friend-fries.vercel.app/lookup_wallet", {
+        params: { publicKey: auth.publicKey },
+      })
+    ).data.wallet;
+
+    return wallet;
   }
 
   const { primaryWallet } = useDynamicContext();

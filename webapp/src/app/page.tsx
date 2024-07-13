@@ -10,10 +10,8 @@ import {
 import axios from "axios";
 
 export default function Home() {
-  const [response, setResponse] = useState("{}");
-  // const [otc, setOtc] = useState("");
   const [auth, setAuth] = useState(
-    null as { jwt: string; publicKey: string } | null
+    null as { jwt?: string; publicKey: string } | null
   );
 
   async function signIn() {
@@ -34,7 +32,6 @@ export default function Home() {
         params: { signature, nonce, publicKey, wallet: primaryWallet?.address },
       })
     ).data.jwt;
-    setResponse(jwt);
     setAuth({ jwt, publicKey });
 
     // doesn't work
@@ -48,7 +45,19 @@ export default function Home() {
 
   const { primaryWallet } = useDynamicContext();
   useEffect(() => {
-    console.log("wallet: " + primaryWallet?.address);
+    const wallet = primaryWallet?.address;
+    if (wallet) {
+      axios
+        .get("https://friend-fries.vercel.app/lookup_pk", {
+          params: { wallet },
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            setAuth({ publicKey: response.data.publicKey });
+          }
+        })
+        .catch(console.error);
+    }
   }, [primaryWallet]);
 
   return (
@@ -58,7 +67,6 @@ export default function Home() {
       {useIsLoggedIn() && !auth ? (
         <button onClick={signIn}>Connect bracelet</button>
       ) : null}
-      <div className="w-full">{response}</div>
     </main>
   );
 }

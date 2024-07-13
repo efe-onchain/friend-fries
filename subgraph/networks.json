@@ -1,0 +1,8 @@
+{
+  "base-sepolia": {
+    "FriendFries": {
+      "address": "0x3a28b4fd35491ea51f42dab77828f5f73ffe43c8",
+      "startBlock": 12523443
+    }
+  }
+}

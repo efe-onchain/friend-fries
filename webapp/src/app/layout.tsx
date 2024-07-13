@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+
 import "./globals.css";
 import {
   DynamicContextProvider,
@@ -25,7 +27,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${GeistMono.className} min-h-screen max-w-md flex flex-col justify-center items-center mx-auto`}>
         <DynamicContextProvider
           settings={{
             environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV_ID,

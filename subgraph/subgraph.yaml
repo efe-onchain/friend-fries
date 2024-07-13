@@ -1,0 +1,32 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: FriendFries
+    network: base-sepolia
+    source:
+      address: "0x4D48997492D6D5952573284899dd2443D1c86b42"
+      abi: FriendFries
+      startBlock: 12523443
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - BountyCancelled
+        - BountyClaimed
+        - BountyCreated
+      abis:
+        - name: FriendFries
+          file: ./abis/FriendFries.json
+      eventHandlers:
+        - event: BountyCancelled(uint256)
+          handler: handleBountyCancelled
+        - event: BountyClaimed(uint256,indexed address,uint256)
+          handler: handleBountyClaimed
+        - event: BountyCreated(uint256,string,string,string,uint256,uint256,uint256,uint256,uint8,address,uint256)
+          handler: handleBountyCreated
+      file: ./src/mappings/mappings.ts

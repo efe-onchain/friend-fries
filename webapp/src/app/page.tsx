@@ -13,6 +13,7 @@ import {
 } from "@dynamic-labs/sdk-react-core";
 import axios from "axios";
 
+
 export default function Home() {
   const [response, setResponse] = useState("{}");
   // const [otc, setOtc] = useState("");
@@ -85,6 +86,7 @@ export default function Home() {
         <button onClick={signIn}>Connect bracelet</button>
       ) : null}
       <div className="w-full">{response}</div>
+
     </main>
   );
 }

@@ -6,9 +6,16 @@ import Link from "next/link";
 import { ProfileDetails } from "@/app/components/ProfileDetails";
 import { ProfileStatCard } from "../components/ProfileStatCard";
 import { convertEthToHumanReadable } from "../helpers";
-import "react-responsive-modal/styles.css";
+
+import {
+  useSocialAccounts,
+  useUserWallets,
+} from "@dynamic-labs/sdk-react-core";
 
 export default function Home() {
+  const wallets = useUserWallets();
+  const { getLinkedAccountInformation } = useSocialAccounts();
+  const account = getLinkedAccountInformation("farcaster" as any);
   const [participant, setParticipant] = useState<any>([]);
   const [bounty, setBounty] = useState<any[]>([]);
   const friendFriesClient = new ApolloClient({
@@ -16,62 +23,65 @@ export default function Home() {
     cache: new InMemoryCache(),
   });
   useEffect(() => {
-    friendFriesClient
-      .query({
-        query: gql`
-          query {
-            participant(id: "0x84af84fd1a6ef4d7275b52f6e2924c0580f37e24") {
-              id
-              totalRewards
-              participated(first: 50) {
+    if (wallets && wallets.length > 0) {
+      friendFriesClient
+        .query({
+          query: gql`
+            query {
+              participant(id: "${wallets[0].address}") {
                 id
-                image
+                totalRewards
+                participated(first: 50) {
+                  id
+                  image
+                }
               }
             }
-          }
-        `,
-      })
-      .then((result) => {
-        setParticipant(result.data.participant);
-      });
+          `,
+        })
+        .then((result) => {
+          console.log(result.data.participant);
+          setParticipant(result.data.participant);
+        });
 
-    friendFriesClient
-      .query({
-        query: gql`
-          query {
-            bounties(
-              first: 50
-              orderBy: blockTimestamp
-              orderDirection: desc
-              where: { owner: "0x30d38078d6117285d6730f971d3f50a9004a575b" }
-            ) {
-              id
-              blockTimestamp
-              title
-              description
-              image
-              individualReward
-              maxParticipants
-              numParticipants
-              participants
-              owner
-              rewarded
-              status
-              deadline
+      friendFriesClient
+        .query({
+          query: gql`
+            query {
+              bounties(
+                first: 50
+                orderBy: blockTimestamp
+                orderDirection: desc
+                where: { owner: "${wallets[0].address}" }
+              ) {
+                id
+                blockTimestamp
+                title
+                description
+                image
+                individualReward
+                maxParticipants
+                numParticipants
+                participants
+                owner
+                rewarded
+                status
+                deadline
+              }
             }
-          }
-        `,
-      })
-      .then((result) => {
-        setBounty(result.data.bounties);
-      });
+          `,
+        })
+        .then((result) => {
+          setBounty(result.data.bounties);
+        });
+    }
   }, []);
   return (
     <main>
       <div className="flex justify-between font-bold text-xl pt-12">
         <p>FriendFries🍟</p>
       </div>
-      <ProfileDetails address={"builderszn.eth"} />
+      <ProfileDetails profile={account} />
       {participant && (
         <div className="grid grid-cols-2 gap-4">
           <ProfileStatCard

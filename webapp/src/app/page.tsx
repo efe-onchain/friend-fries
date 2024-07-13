@@ -9,6 +9,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { authenticate } from "./utils";
 import { CustomModal } from "./components/CustomModal";
+import { createConfig, http, WagmiProvider } from "wagmi";
+import { baseSepolia } from "viem/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { config, queryClient } from "./config";
+import "react-responsive-modal/styles.css";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -57,28 +62,34 @@ export default function Home() {
     }
   }, [auth, router]);
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div>
-          <DynamicWidget />
-          <div>Hello</div>
-          {loggedIn && !auth ? (
-            <button onClick={() => setOpenModal(true)}>Connect bracelet</button>
-          ) : null}
-          <CustomModal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
-            friend={false}
-            onClick={() => {
-              signIn().then(() => {
-                setOpenModal(false);
-              });
-            }}
-          />
-        </div>
-      )}
-    </main>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div>
+              <DynamicWidget />
+              <div>Hello</div>
+              {loggedIn && !auth ? (
+                <button onClick={() => setOpenModal(true)}>
+                  Connect bracelet
+                </button>
+              ) : null}
+              <CustomModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                friend={false}
+                onClick={() => {
+                  signIn().then(() => {
+                    setOpenModal(false);
+                  });
+                }}
+              />
+            </div>
+          )}
+        </main>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

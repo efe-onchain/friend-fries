@@ -19,11 +19,7 @@ export default function Home() {
         .query({
           query: gql`
             query {
-              bounties(
-                first: 15
-                orderBy: blockTimestamp
-                orderDirection: desc
-              ) {
+              bounties(first: 15, orderBy: blockTimestamp, orderDirection: desc) {
                 id
                 blockTimestamp
                 title
@@ -87,14 +83,14 @@ export default function Home() {
         </Link>
         <span className="h-[20px] w-[1px] bg-black" />
 
-        <div className="hover:underline" onClick={() => setMine(true)}>
-          My Bounties
-        </div>
-        <span className="h-[20px] w-[1px] bg-black" />
-
         <div className="hover:underline" onClick={() => setMine(false)}>
           Available Bounties
         </div>
+        <span className="h-[20px] w-[1px] bg-black" />
+
+        <Link href="/leaderboard" className="hover:underline">
+          Leaderboard
+        </Link>
       </div>
       <div className="flex flex-col items-center justify-center">
         {bounty.length > 0 ? (

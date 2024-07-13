@@ -24,7 +24,7 @@ export function ProfileDetails({ address }: { address: any }) {
         {profile && <h2 className="text-2xl md:text-3xl font-bold">{profile.displayName}</h2>}
         {profile && <p className="text-lg md:text-md text-gray-500">{profile.description}</p>}
 
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center pb-4 gap-4">
           {profile && profile.links && profile.links.farcaster && (
             <Link target="_blank" href={profile.links.farcaster.link}>
               <Image src={farcasterIcon} alt="Farcaster Icon" className="w-6 h-6" />

@@ -1,3 +1,6 @@
+
+![FriendFries](https://github.com/user-attachments/assets/e7dec21d-ead3-4db6-b7ec-0243c0c50fbd)
+
 # Friend Fries🍟
 
 ## Overview
@@ -38,3 +41,8 @@ We attempted to optimize the subgraph as much as we could. We used Bytes as IDs 
 ### Contract Deployment
 
 We deployed our contracts on Base Sepolia.
+![photo_5810149625825444562_y](https://github.com/user-attachments/assets/889138aa-95c1-46f6-8784-ce9d8945200c)
+![photo_5810149625825444575_y](https://github.com/user-attachments/assets/7d438b6f-8711-4b31-8a60-660724b1d237)
+![photo_5810149625825444572_y](https://github.com/user-attachments/assets/45d5df83-137f-43e9-8fd0-36eb2a2f8015)
+![photo_5810149625825444584_y](https://github.com/user-attachments/assets/d44a8b68-03bd-4285-8d4e-b31fe981e868)
+![Screenshot 2024-07-14 041011](https://github.com/user-attachments/assets/860b8af7-ea78-4e83-afdc-6f3650e63c6b)

@@ -60,7 +60,7 @@ export default function CreateComponent() {
       functionName: "createBounty",
       chain: baseSepolia,
       args: [title, description, image, reward * 10 ** 18, maxParticipants, deadline],
-      value: BigInt(maxParticipants) * BigInt(reward),
+      value: BigInt(maxParticipants) * BigInt(reward * 10 ** 18),
       account,
     });
     console.log("Form submitted:", title);

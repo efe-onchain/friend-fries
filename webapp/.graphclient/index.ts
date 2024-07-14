@@ -888,7 +888,7 @@ const friendfriesTransforms = [];
 const additionalTypeDefs = [] as any[];
 const friendfriesHandler = new GraphqlHandler({
               name: "friendfries",
-              config: {"endpoint":"https://api.studio.thegraph.com/query/55913/friendfries/version/latest"},
+              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/6dbf780f09e4aab821388ccf2892cc78/subgraphs/id/AQL2hBo9CeiaCNP2Ks3iJHVo1iXiBgAVJBXJwnta9Xny"},
               baseDir,
               cache,
               pubsub,

@@ -62,12 +62,17 @@ export default function Home() {
           {isLoading ? (
             <div>Loading...</div>
           ) : (
-            <div>
+            <div className="flex flex-col  justify-center items-center">
+              <p className="font-bold text-2xl p-4">FriendFries🍟</p>
+              <p className="text-gray-500 text-md p-4 text-center">Create bounties, meet friends, win fries 🇧🇪</p>
               <DynamicWidget />
-              FriendFries🍟
+
               {loggedIn && !auth ? (
-                <button onClick={() => setOpenModal(true)}>Connect Your ETHGlobal NFC Tag</button>
+                <button className="p-4" onClick={() => setOpenModal(true)}>
+                  Connect Your ETHGlobal NFC Tag
+                </button>
               ) : null}
+              <div className="text-center p-4">follow us on farcsater @nxs @builderszn.eth</div>
               <CustomModal
                 open={openModal}
                 onClose={() => setOpenModal(false)}

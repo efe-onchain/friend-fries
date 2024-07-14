@@ -38,9 +38,14 @@ export default function Home() {
     <main>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <div className="flex justify-between font-bold text-xl pt-12">
-            <p>FriendFries🍟</p>
-            <DynamicWidget />
+          <div className="flex flex-col">
+            <Link href="/bounties" className="font-normal hover:underline pt-10">
+              Back
+            </Link>
+            <div className="flex justify-between items-center font-bold text-xl pt-2">
+              <p>FriendFries🍟</p>
+              <DynamicWidget />
+            </div>
           </div>
           <ProfileDetails profile={account} />
           {participant && (

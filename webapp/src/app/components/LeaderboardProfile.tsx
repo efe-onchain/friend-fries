@@ -24,7 +24,7 @@ export function LeaderboardProfile({
         if (filtered.length > 0) setProfile(filtered[0]);
       });
   }, []);
-  if (!profile) return <div>Loading...</div>;
+  if (!profile) return <div></div>;
   return (
     <div className="flex justify-center items-center">
       <div className="flex justify-center items-center w-32 h-32 md:w-40 md:h-40">

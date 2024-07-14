@@ -23,10 +23,10 @@ export default function Leaderboard() {
         <p>FriendFries🍟</p>
         <DynamicWidget />
       </div>
-
-      {leaderboard ? (
+      <p>The #1 bounty hunter is eligible to win 🍟 from our team!</p>
+      {leaderboard && (
         <div className="flex flex-col items-center justify-center">
-          {leaderboard.length > 0 ? (
+          {leaderboard.length > 0 &&
             leaderboard.map((participant, index) => (
               <LeaderboardProfile
                 key={index}
@@ -34,13 +34,8 @@ export default function Leaderboard() {
                 address={participant.id}
                 totalRewards={participant.totalRewards}
               />
-            ))
-          ) : (
-            <div>Loading...</div>
-          )}
+            ))}
         </div>
-      ) : (
-        <div>Loading...</div>
       )}
     </div>
   );

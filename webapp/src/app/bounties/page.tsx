@@ -27,7 +27,7 @@ export default function Home() {
         <p>FriendFries🍟</p>
         <DynamicWidget />
       </div>
-      <div className="flex text-md justify-between items-center  py-4">
+      <div className="grid grid-cols-2 text-md text-center gap-3  py-4">
         <Link href="/bounties/create" className="font-normal  hover:underline">
           Create Bounty
         </Link>
@@ -36,6 +36,9 @@ export default function Home() {
 
         <Link href="/leaderboard" className="hover:underline">
           Leaderboard
+        </Link>
+        <Link href="/profile" className="hover:underline">
+          Profile
         </Link>
       </div>
       <div className="flex flex-col items-center justify-center">

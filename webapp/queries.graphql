@@ -21,7 +21,7 @@ query LatestBounties {
 }
 
 query Leaderboard {
-  participants(orderBy: totalRewards, orderDirection: desc) {
+  participants(first: 50, orderBy: totalRewards, orderDirection: desc) {
     id
     totalRewards
   }

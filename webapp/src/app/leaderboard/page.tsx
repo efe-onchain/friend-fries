@@ -11,6 +11,7 @@ export default function Leaderboard() {
 
   useEffect(() => {
     execute(LeaderboardDocument, {}).then((result) => {
+      console.log(result.data.participants);
       setLeaderboard(result.data.participants);
     });
   }, []);
@@ -23,13 +24,13 @@ export default function Leaderboard() {
         <p>FriendFries🍟</p>
         <DynamicWidget />
       </div>
-      <p>The #1 bounty hunter is eligible to win 🍟 from our team!</p>
+      <p className="pt-8">The #1 bounty hunter is eligible to win 🍟 from our team!</p>
       {leaderboard && (
         <div className="flex flex-col items-center justify-center">
           {leaderboard.length > 0 &&
             leaderboard.map((participant, index) => (
               <LeaderboardProfile
-                key={index}
+                key={index + 1}
                 ranking={index + 1}
                 address={participant.id}
                 totalRewards={participant.totalRewards}

@@ -24,20 +24,30 @@ export function LeaderboardProfile({
         if (filtered.length > 0) setProfile(filtered[0]);
       });
   }, []);
-  if (!profile) return <div></div>;
+
   return (
     <div className="flex justify-center items-center">
-      <div className="flex justify-center items-center w-32 h-32 md:w-40 md:h-40">
-        <p className="font-bold pr-8">{ranking}.</p>
-        {profile && (
-          <img src={profile.avatar} alt="Affiliate Profile Picture" className="rounded-full h-[50px] w-[50px]" />
-        )}
-        <div className="mx-4">
-          {profile && <h2 className="text-lg font-bold">{profile.displayName}</h2>}
-          {profile && <p className="text-md text-gray-500">{address}</p>}
-          {profile && <p className="text-md text-gray-500">{convertEthToHumanReadable(Number(totalRewards))} ETH</p>}
+      {profile ? (
+        <div className="flex justify-center items-center w-32 h-32 md:w-40 md:h-40">
+          {profile && (
+            <img src={profile.avatar} alt="Affiliate Profile Picture" className="rounded-full h-[50px] w-[50px]" />
+          )}
+          <div className="mx-4">
+            {profile && <h2 className="text-lg font-bold">{profile.displayName}</h2>}
+            {profile && <p className="text-md text-gray-500">{address}</p>}
+            {profile && <p className="text-md text-gray-500">{convertEthToHumanReadable(Number(totalRewards))} ETH</p>}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-center items-center w-32 h-32 md:w-40 md:h-40">
+          <p className="font-bold pr-8">{ranking}.</p>
+
+          <div className="mx-4">
+            <p className="text-md text-gray-500">{address}</p>
+            <p className="text-md text-gray-500">{convertEthToHumanReadable(Number(totalRewards))} ETH</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

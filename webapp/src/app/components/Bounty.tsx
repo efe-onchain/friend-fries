@@ -2,10 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  convertEthToHumanReadable,
-  convertUnixTimestampToDateTime,
-} from "../helpers";
+import { convertEthToHumanReadable, convertUnixTimestampToDateTime } from "../helpers";
 import { Button } from "./Button";
 import Modal from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
@@ -43,11 +40,8 @@ enum Status {
 async function lookupUser() {
   const auth = await authenticate();
 
-  const wallet: string = (
-    await axios.get(
-      `https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`
-    )
-  ).data.wallet;
+  const wallet: string = (await axios.get(`https://friend-fries.vercel.app/lookup_wallet/${auth.publicKey}`)).data
+    .wallet;
 
   return wallet;
 }
@@ -58,15 +52,7 @@ export function BountyCard({ bounty }: { bounty: any }) {
   const [openModal, setOpenModal] = useState(false);
   async function completeBounty() {
     const wallet = await lookupUser();
-    alert(
-      wallet +
-        " & " +
-        bounty.bountyNumber +
-        "; type: " +
-        typeof bounty.bountyNumber
-    );
-    const walletClient =
-      (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
+    const walletClient = (await primaryWallet?.connector?.getWalletClient()) as WalletClient;
     const [account] = await walletClient.getAddresses();
     await walletClient.writeContract({
       address: contractAddress,
@@ -82,37 +68,22 @@ export function BountyCard({ bounty }: { bounty: any }) {
     <div>
       {bounty ? (
         <div className="flex flex-col justify-center items-center p-4">
-          <Image
-            className="rounded-xl"
-            src={bounty.image}
-            alt={bounty?.title}
-            width={300}
-            height={300}
-          />
+          <Image className="rounded-xl" src={bounty.image} alt={bounty?.title} width={300} height={300} />
           <div className="py-4">
             <div>
               <p className="text-gray-500">
-                from:{" "}
-                {`${bounty.owner.substring(0, 6)}...${bounty.owner.substring(
-                  bounty.owner.length - 4
-                )}`}
+                from: {`${bounty.owner.substring(0, 6)}...${bounty.owner.substring(bounty.owner.length - 4)}`}
               </p>
             </div>
 
             <div className="flex justify-between">
-              <p>
-                Bounty: {convertEthToHumanReadable(bounty.individualReward)} ETH
-              </p>
+              <p>Bounty: {convertEthToHumanReadable(bounty.individualReward)} ETH</p>
               <p>
                 Completed By: {bounty.numParticipants}/{bounty.maxParticipants}
               </p>
             </div>
-            <p className="pb-4">
-              Deadline: {convertUnixTimestampToDateTime(bounty.deadline)}
-            </p>
-            <h3 className="text-black text-lg text-left font-semibold">
-              {bounty.title}
-            </h3>
+            <p className="pb-4">Deadline: {convertUnixTimestampToDateTime(bounty.deadline)}</p>
+            <h3 className="text-black text-lg text-left font-semibold">{bounty.title}</h3>
             <p className="text-gray-500">{bounty.description}</p>
             <div className="flex justify-end">
               {address === bounty.owner && (
@@ -126,11 +97,9 @@ export function BountyCard({ bounty }: { bounty: any }) {
             </div>
           </div>
 
-          <CustomModal
-            open={openModal}
-            onClose={() => setOpenModal(false)}
-            onClick={completeBounty}
-          />
+          {bounty.maxParticipants > bounty.numParticipants && (
+            <CustomModal open={openModal} onClose={() => setOpenModal(false)} onClick={completeBounty} />
+          )}
         </div>
       ) : (
         <div>Loading...</div>
